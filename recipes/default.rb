@@ -10,3 +10,5 @@ chef_gem 'celluloid-io' do
   version '~> 0.10.0'
 end
 chef_gem 'dcell'
+
+node[:chef_client][:load_gems] = {:flock_of_chefs => nil}
