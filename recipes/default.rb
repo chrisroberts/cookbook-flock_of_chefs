@@ -1,3 +1,7 @@
+%w(libzmq1 libzmq-dev).each do |zk_pkg|
+  chef_package zk_pkg
+end
+
 chef_gem 'flock_of_chefs'
 require 'flock_of_chefs'
 
