@@ -1,14 +1,7 @@
-%w(libzmq1 libzmq-dev).each do |zk_pkg|
+node[:flock_of_chefs][:packages].each do |zk_pkg|
   chef_package zk_pkg
 end
 
-chef_gem 'zk'
-chef_gem 'celluloid-io' do
-  action :install
-  version '~> 0.10.0'
-end
-
-chef_gem 'dcell'
 chef_gem 'flock_of_chefs'
 require 'flock_of_chefs'
 
@@ -27,7 +20,7 @@ end
 # TODO: Can we get at the runner in a more direct fashion?
 ruby_block 'Flocking Chefs' do
   block do
-    DCell.me[:flocked_resources].new_run(
+    DCell.me[:resource_manager].new_run(
       ObjectSpace.each_object(Chef::Runner).map.first
     )
     Chef::Log.info 'This Chef is now flocked'
