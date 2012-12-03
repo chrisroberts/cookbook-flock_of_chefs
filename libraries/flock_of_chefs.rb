@@ -1,12 +1,11 @@
 module FlockOfChefs
   class << self
-    def search(args={})
-      DCell::Node.all.find_all do |dnode|
-
+    def search(*args)
+      Array(Chef::Query::Search.new.search(*args).first).map do |n|
+        FlockOfChefs[n.name]
       end
     end
   end
-
   module Waiter
     def do_wait_until(pause = 1.0, &block)
       until(block.call)
@@ -39,14 +38,14 @@ module FlockOfChefs
           @wait_while[:block].call
         end
       end
-      original_provider_for_action(*args)
+      unflocked_provider_for_action(*args)
     end
 
     class << self
       def included(base)
         base.class_eval do
-          unless(instance_methods.map(&:to_sym).include?(:original_provider_for_action))
-            alias_method :original_provider_for_action, :provider_for_action
+          unless(instance_methods.map(&:to_sym).include?(:unflocked_provider_for_action))
+            alias_method :unflocked_provider_for_action, :provider_for_action
             alias_method :provider_for_action, :flocked_provider_for_action
           end
         end
