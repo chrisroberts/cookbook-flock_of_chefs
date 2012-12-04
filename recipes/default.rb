@@ -8,6 +8,8 @@ require 'flock_of_chefs'
 # Loads DCell up front
 node[:chef_client][:load_gems] = {:flock_of_chefs => nil}
 
+include_recipe 'flock_of_chefs::keeper'
+
 ruby_block 'Hook chefs' do
   block do
     FlockOfChefs.start_flocking!(node)
