@@ -8,27 +8,27 @@ require 'flock_of_chefs'
 # Loads DCell up front
 node[:chef_client][:load_gems] = {:flock_of_chefs => nil}
 
-include_recipe 'flock_of_chefs::keeper'
-
-ruby_block 'Hook chefs' do
+hook = ruby_block 'Hook chefs' do
   block do
     FlockOfChefs.start_flocking!(node)
   end
   not_if do
-    DCell.me
+    FlockOfChefs.me
   end
 end
+hook.run_action(:create)
 
 # TODO: Can we get at the runner in a more direct fashion?
-ruby_block 'Flocking Chefs' do
+flock = ruby_block 'Flocking Chefs' do
   block do
-    DCell.me[:resource_manager].new_run(
+    FlockOfChefs.get(:resource_manager).new_run(
       ObjectSpace.each_object(Chef::Runner).map.first
     )
-    DCell.me[:flocked_api].chef_app = ObjectSpace.each_object(Chef::Application).map.first
+    FlockOfChefs.get(:flock_api).chef_app = ObjectSpace.each_object(Chef::Application).map.first
     Chef::Log.info 'This Chef is now flocked'
   end
   wait_until do
-    DCell.me
+    FlockOfChefs.me
   end
 end
+flock.run_action(:create)
