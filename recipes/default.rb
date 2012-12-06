@@ -25,6 +25,7 @@ ruby_block 'Flocking Chefs' do
     DCell.me[:resource_manager].new_run(
       ObjectSpace.each_object(Chef::Runner).map.first
     )
+    DCell.me[:flocked_api].chef_app = ObjectSpace.each_object(Chef::Application).map.first
     Chef::Log.info 'This Chef is now flocked'
   end
   wait_until do
