@@ -2,6 +2,15 @@
 
 Flock of Chefs provides inter-node communication primatives to Chef instances.
 
+## Flock node creation notes
+
+Building a flock requires access to zookeeper nodes. ZK nodes are discovered
+via node attributes provided via the zookeeperd cookbook. In general for 
+buiding testing nodes, including zookeeperd in the run list of the flock
+nodes the normal setup.
+
+* https://github.com/hw-cookbooks/zookeeperd
+
 ## Important note
 
 This is highly experimental. It is not recommended near any environment
